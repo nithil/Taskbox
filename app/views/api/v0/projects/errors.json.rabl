@@ -1,0 +1,1 @@
+node(:errors){@project.errors.full_messages}
