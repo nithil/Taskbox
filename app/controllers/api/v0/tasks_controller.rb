@@ -1,4 +1,6 @@
 class Api::V0::TasksController < Api::V0::ApiController
+	before_action :check_api_key
+	before_action :set_task, only: [:show, :update, :destroy]
 	def index
 		@tasks = Task.all
 	end
@@ -13,7 +15,6 @@ class Api::V0::TasksController < Api::V0::ApiController
 	end
 
 	def update
-		@task = Task.find(params[:id])
 		if @task.update_attributes(task_params)
 			render 'update.json'
 		else
@@ -22,16 +23,17 @@ class Api::V0::TasksController < Api::V0::ApiController
 	end
 
 	def show
-		@task = Task.find(params[:id])
 	end
 
 	def destroy
-		@task = Task.find(params[:id])
 		@task.destroy
 	end
 
 	private
 
+	def set_task
+		@task = @user.tasks.find(params[:id])
+	end
 	def task_params
 		params[:task].permit(:title, :due_date, :is_completed, :project_id)
 	end

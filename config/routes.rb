@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  devise_for :users
+  get 'dashboard/index'
+
   namespace :api, format: "json" do
     namespace :v0 do
       resources :clients
@@ -7,7 +10,7 @@ Rails.application.routes.draw do
       resources :tasks
     end
   end
-
+  root 'dashboard#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

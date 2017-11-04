@@ -1,10 +1,13 @@
 class Api::V0::ClientsController < Api::V0::ApiController
+	before_action :check_api_key
+	before_action :set_task, only: [:show, :update, :destroy]
 	def index
-		@clients = Client.all
+		@clients = @user.clients
 	end
 
 	def create
 		@client = Client.new(client_params)
+		@client.user_id = @user.id
 		if @client.save
 			render 'create.json'
 		else
@@ -13,7 +16,6 @@ class Api::V0::ClientsController < Api::V0::ApiController
 	end
 
 	def update
-		@client = Client.find(params[:id])
 		if @client.update_attributes(client_params)
 			render 'update.json'
 		else
@@ -22,15 +24,17 @@ class Api::V0::ClientsController < Api::V0::ApiController
 	end
 
 	def show
-		@client = Client.find(params[:id])
 	end
 
 	def destroy
-		@client = Client.find(params[:id])
 		@client.destroy
 	end
 
 	private
+
+	def set_task
+		@task = @user.tasks.find(params[:id])
+	end
 
 	def client_params
 		params[:client].permit(:name, :mobile, :email, :website)

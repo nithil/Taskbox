@@ -1,4 +1,5 @@
 class Project < ActiveRecord::Base
+	belongs_to :user
 	belongs_to :client
 	has_many :tasks
 	validates :name, :client_id, :start_date, :end_date, presence: true
